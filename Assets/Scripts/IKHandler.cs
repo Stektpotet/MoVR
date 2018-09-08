@@ -27,21 +27,29 @@ public class IKHandler : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
-
     }
 
     private void OnAnimatorIK( int layerIndex )
     {
 
         //HANDS
+            //POSITION
         animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, IK_weight);
         animator.SetIKPositionWeight(AvatarIKGoal.RightHand, IK_weight);
 
         animator.SetIKPosition(AvatarIKGoal.LeftHand, IK_targetLeftHand.position);
         animator.SetIKPosition(AvatarIKGoal.RightHand, IK_targetRightHand.position);
+            //ROTATION
+        animator.SetIKRotationWeight(AvatarIKGoal.LeftHand,  IK_weight);
+        animator.SetIKRotationWeight(AvatarIKGoal.RightHand, IK_weight);
+
+        animator.SetIKRotation(AvatarIKGoal.LeftHand, IK_targetLeftHand.rotation * Quaternion.Euler(0,0,90));
+        animator.SetIKRotation(AvatarIKGoal.RightHand, IK_targetRightHand.rotation * Quaternion.Euler(0, 0, -90));
+
+        //animator.SetBoneLocalRotation(HumanBodyBones.LeftHand, IK_targetLeftHand.rotation);
 
         //TODO: Add Elbows
-        
+
         //FEET
         animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, IK_weight);
         animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, IK_weight);
@@ -64,8 +72,12 @@ public class IKHandler : MonoBehaviour
         animator.SetLookAtPosition(IK_head.position + IK_head.forward);
         animator.SetLookAtWeight(1);
 
-    }
 
+    }
+    void OnAnimatorMove() 
+    {
+        transform.position = new Vector3(IK_head.transform.position.x, transform.position.y, IK_head.transform.position.z);
+    }
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
