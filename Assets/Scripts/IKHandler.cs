@@ -9,6 +9,7 @@ public class IKHandler : MonoBehaviour
 
     public float IK_weight = 1;
 
+    public Vector3 handOffset = new Vector3();
     public Transform root;
 
     public Transform IK_targetLeftFoot;
@@ -37,14 +38,14 @@ public class IKHandler : MonoBehaviour
         animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, IK_weight);
         animator.SetIKPositionWeight(AvatarIKGoal.RightHand, IK_weight);
 
-        animator.SetIKPosition(AvatarIKGoal.LeftHand, IK_targetLeftHand.position);
-        animator.SetIKPosition(AvatarIKGoal.RightHand, IK_targetRightHand.position);
+        animator.SetIKPosition(AvatarIKGoal.LeftHand, IK_targetLeftHand.position + IK_targetLeftHand.TransformVector(handOffset));
+        animator.SetIKPosition(AvatarIKGoal.RightHand, IK_targetRightHand.position + IK_targetRightHand.TransformVector(handOffset));
             //ROTATION
         animator.SetIKRotationWeight(AvatarIKGoal.LeftHand,  IK_weight);
         animator.SetIKRotationWeight(AvatarIKGoal.RightHand, IK_weight);
 
-        animator.SetIKRotation(AvatarIKGoal.LeftHand, IK_targetLeftHand.rotation * Quaternion.Euler(0,0,90));
-        animator.SetIKRotation(AvatarIKGoal.RightHand, IK_targetRightHand.rotation * Quaternion.Euler(0, 0, -90));
+        animator.SetIKRotation(AvatarIKGoal.LeftHand, IK_targetLeftHand.rotation * Quaternion.Euler(30,10,90));
+        animator.SetIKRotation(AvatarIKGoal.RightHand, IK_targetRightHand.rotation * Quaternion.Euler(30, 10, -90));
 
         //animator.SetBoneLocalRotation(HumanBodyBones.LeftHand, IK_targetLeftHand.rotation);
 
