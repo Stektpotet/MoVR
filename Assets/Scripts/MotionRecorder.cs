@@ -25,10 +25,14 @@ public class MotionRecorder : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
-        
+        ResetRecorder();
+    }
+
+
+    public void ResetRecorder()
+    {
         //it's totally a good sign when the references says "TODO"
         m_recorder = new GameObjectRecorder(gameObject);
-        
         m_recorder.BindComponentsOfType<Transform>(gameObject, true); //this results in an animation that "works", but not on humanoids :(
     }
 
@@ -38,6 +42,7 @@ public class MotionRecorder : MonoBehaviour
         if (m_clip != null) {
             SteamVR_Controller.Input(Input.GetButtonDown("Button1") ? 1 : 2).TriggerHapticPulse(1000);
             m_recording = true;
+            
             previewAnimator.SetTrigger("StopPreview");
 
             m_clip.ClearCurves();
@@ -55,12 +60,14 @@ public class MotionRecorder : MonoBehaviour
             SteamVR_Controller.Input(Input.GetButtonDown("Button1") ? 1 : 2).TriggerHapticPulse(1000);
             m_recorder.SaveToClip(m_clip);
             m_recorder.ResetRecording();
-            m_clip.SampleAnimation(previewAnimator.gameObject, 0);
-            m_clip.EnsureQuaternionContinuity();
-            previewAnimator.gameObject.SetActive(true);
-            
-            if(previewAnimator.gameObject.activeSelf && previewAnimator.isActiveAndEnabled)
+            ResetRecorder();
+            if (!previewAnimator.isInitialized)
+                previewAnimator.Rebind();
+
+            if (previewAnimator.gameObject.activeSelf && previewAnimator.isActiveAndEnabled)
+            {
                 previewAnimator.SetTrigger("PlayPreview");
+            }
             
 
             foreach (GameObject indicator in indicators) {
