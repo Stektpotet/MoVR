@@ -43,7 +43,7 @@ namespace Valve.VR.InteractionSystem
 			{
 				currentLinearMapping = linearMapping.value;
 				animator.enabled = true;
-				animator.Play( 0, 0, currentLinearMapping );
+				animator.Play("Anim", 0 , currentLinearMapping );
 				framesUnchanged = 0;
 			}
 			else
