@@ -66,18 +66,42 @@ public class IKHandler : MonoBehaviour
         animator.SetIKHintPosition(AvatarIKHint.RightKnee, IK_hintRightKnee.position);
 
         //MORE?
-
-        //animator.MatchTarget()
+        
         //animator.MatchTarget(IK_head.position, IK_head.rotation, AvatarTarget.)
 
-        animator.SetLookAtPosition(IK_head.position + IK_head.forward);
+        animator.SetLookAtPosition(IK_head.position + IK_head.forward*10);
         animator.SetLookAtWeight(1);
-
+        if (Input.GetAxis("PrimaryHandTrigger") >= 0.5f) {
+            animator.SetBoneLocalRotation(HumanBodyBones.LeftIndexIntermediate, Quaternion.Euler(0, 0, 90));
+            animator.SetBoneLocalRotation(HumanBodyBones.LeftLittleIntermediate, Quaternion.Euler(0, 0, 90));
+            animator.SetBoneLocalRotation(HumanBodyBones.LeftMiddleIntermediate, Quaternion.Euler(0, 0, 90));
+            animator.SetBoneLocalRotation(HumanBodyBones.LeftRingIntermediate, Quaternion.Euler(0, 0, 90));
+        }
+        else {
+            animator.SetBoneLocalRotation(HumanBodyBones.LeftIndexIntermediate, Quaternion.Euler(0, 0, 0));
+            animator.SetBoneLocalRotation(HumanBodyBones.LeftLittleIntermediate, Quaternion.Euler(0, 0, 0));
+            animator.SetBoneLocalRotation(HumanBodyBones.LeftMiddleIntermediate, Quaternion.Euler(0, 0, 0));
+            animator.SetBoneLocalRotation(HumanBodyBones.LeftRingIntermediate, Quaternion.Euler(0, 0, 0));
+        }
+        if (Input.GetAxis("SecondaryHandTrigger") >= 0.5f) {
+            animator.SetBoneLocalRotation(HumanBodyBones.RightIndexIntermediate, Quaternion.Euler(0, 0, 90));
+            animator.SetBoneLocalRotation(HumanBodyBones.RightLittleIntermediate, Quaternion.Euler(0, 0, 90));
+            animator.SetBoneLocalRotation(HumanBodyBones.RightMiddleIntermediate, Quaternion.Euler(0, 0, 90));
+            animator.SetBoneLocalRotation(HumanBodyBones.RightRingIntermediate, Quaternion.Euler(0, 0, 90));
+        }
+        else {
+            animator.SetBoneLocalRotation(HumanBodyBones.RightIndexIntermediate, Quaternion.Euler(0, 0, 0));
+            animator.SetBoneLocalRotation(HumanBodyBones.RightLittleIntermediate, Quaternion.Euler(0, 0, 0));
+            animator.SetBoneLocalRotation(HumanBodyBones.RightMiddleIntermediate, Quaternion.Euler(0, 0, 0));
+            animator.SetBoneLocalRotation(HumanBodyBones.RightRingIntermediate, Quaternion.Euler(0, 0, 0));
+        }
 
     }
     void OnAnimatorMove() 
     {
-        transform.position = new Vector3(IK_head.transform.position.x, transform.position.y, IK_head.transform.position.z);
+        transform.position = new Vector3(IK_head.position.x, transform.position.y, IK_head.position.z);
+       
+
     }
     private void OnDrawGizmos()
     {
@@ -92,7 +116,6 @@ public class IKHandler : MonoBehaviour
             Gizmos.DrawLine(IK_hintRightKnee.position, IK_targetRightFoot.position);
             Gizmos.DrawLine(IK_hintRightKnee.position, root.position);
         }
-
         if (IK_targetLeftHand != null && root != null)
         {
             Gizmos.DrawLine(IK_targetLeftHand.position, root.position);

@@ -371,10 +371,10 @@ public class SteamVR_RenderModel : MonoBehaviour
 #if (UNITY_5_4 || UNITY_5_3 || UNITY_5_2 || UNITY_5_1 || UNITY_5_0)
 		mesh.Optimize();
 #endif
-		//mesh.hideFlags = HideFlags.DontUnloadUnusedAsset;
+        //mesh.hideFlags = HideFlags.DontUnloadUnusedAsset;
 
-		// Check cache before loading texture.
-		var material = materials[renderModel.diffuseTextureId] as Material;
+        // Check cache before loading texture.
+        var material = materials[renderModel.diffuseTextureId] as Material;
 		if (material == null || material.mainTexture == null)
 		{
 			var pDiffuseTexture = System.IntPtr.Zero;
