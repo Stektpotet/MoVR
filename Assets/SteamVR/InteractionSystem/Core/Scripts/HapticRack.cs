@@ -59,7 +59,7 @@ namespace Valve.VR.InteractionSystem
 		//-------------------------------------------------
 		void Update()
 		{
-			int currentToothIndex = Mathf.RoundToInt( linearMapping.value * teethCount - 0.5f );
+			int currentToothIndex = Mathf.RoundToInt( linearMapping.Value * teethCount - 0.5f );
 			if ( currentToothIndex != previousToothIndex )
 			{
 				Pulse();

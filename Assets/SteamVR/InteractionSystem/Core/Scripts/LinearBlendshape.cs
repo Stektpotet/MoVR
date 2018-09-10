@@ -36,7 +36,7 @@ namespace Valve.VR.InteractionSystem
 		//-------------------------------------------------
 		void Update()
 		{
-			float value = linearMapping.value;
+			float value = linearMapping.Value;
 
 			//No need to set the blend if our value hasn't changed.
 			if ( value != lastValue )

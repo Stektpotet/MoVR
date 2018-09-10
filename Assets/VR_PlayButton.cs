@@ -27,7 +27,7 @@ public class VR_PlayButton : MonoBehaviour
 
 
     private float animationTime;
-    public float playbackRate = 1;
+    public LinearMappingRemapper playbackRate;
 
 
     private void Awake()
@@ -50,7 +50,7 @@ public class VR_PlayButton : MonoBehaviour
             if(playing)
             {
                 animationTime = animationClip.length;
-                playbackDrive.UpdateMapping(playbackRate * Time.deltaTime / animationTime);
+                playbackDrive.UpdateMapping(playbackRate.Value * Time.deltaTime / animationTime);
                 control.RequestControlBoardFocus();
             }
         }
@@ -65,17 +65,17 @@ public class VR_PlayButton : MonoBehaviour
     {
         if (playing)
         {
-            animationMapping.value += playbackRate * Time.deltaTime / animationTime;
-            if (animationMapping.value > 1)
+            animationMapping.Value += playbackRate.Value * Time.deltaTime / animationTime;
+            if (animationMapping.Value > 1)
             {
                 if (loop)
-                    animationMapping.value = 0;
+                    animationMapping.Value = 0;
                 else
                 {
                     playing = false;
                     onStop.Invoke();
                     control.GiveAwayControlBoardFocus();
-                    animationMapping.value = 0;
+                    animationMapping.Value = 0;
 
                 }
             }

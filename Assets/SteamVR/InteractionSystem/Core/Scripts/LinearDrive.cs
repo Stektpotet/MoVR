@@ -30,7 +30,7 @@ namespace Valve.VR.InteractionSystem
 
         public UnityEvent onStartDrag;
         public UnityEvent onEndDrag;
-        public UnityEvent onDrag;
+        public UnityEvent<float> onDrag;
 
         //-------------------------------------------------
         void Awake()
@@ -52,7 +52,7 @@ namespace Valve.VR.InteractionSystem
 				linearMapping = gameObject.AddComponent<LinearMapping>();
 			}
 
-            initialMappingOffset = linearMapping.value;
+            initialMappingOffset = linearMapping.Value;
 
 			if ( repositionGameObject )
 			{
@@ -69,7 +69,7 @@ namespace Valve.VR.InteractionSystem
                 onStartDrag.Invoke();
 				hand.HoverLock( GetComponent<Interactable>() );
 
-				initialMappingOffset = linearMapping.value - CalculateLinearMapping( hand.transform );
+				initialMappingOffset = linearMapping.Value - CalculateLinearMapping( hand.transform );
 				sampleCount = 0;
 				mappingChangeRate = 0.0f;
 			}
@@ -85,7 +85,7 @@ namespace Valve.VR.InteractionSystem
 			if ( hand.GetStandardInteractionButton() )
 			{
 				UpdateLinearMapping( hand.transform );
-                onDrag.Invoke();
+                onDrag.Invoke(linearMapping.Value);
 			}
 		}
 
@@ -113,15 +113,15 @@ namespace Valve.VR.InteractionSystem
 		//-------------------------------------------------
 		private void UpdateLinearMapping( Transform tr )
 		{
-			prevMapping = linearMapping.value;
-			linearMapping.value = Mathf.Clamp01( initialMappingOffset + CalculateLinearMapping( tr ) );
+			prevMapping = linearMapping.Value;
+			linearMapping.Value = Mathf.Clamp01( initialMappingOffset + CalculateLinearMapping( tr ) );
 
-			mappingChangeSamples[sampleCount % mappingChangeSamples.Length] = ( 1.0f / Time.deltaTime ) * ( linearMapping.value - prevMapping );
+			mappingChangeSamples[sampleCount % mappingChangeSamples.Length] = ( 1.0f / Time.deltaTime ) * ( linearMapping.Value - prevMapping );
 			sampleCount++;
 
 			if ( repositionGameObject )
 			{
-				transform.position = Vector3.Lerp( startPosition.position, endPosition.position, linearMapping.value );
+				transform.position = Vector3.Lerp( startPosition.position, endPosition.position, linearMapping.Value );
 			}
 		}
 
@@ -146,11 +146,11 @@ namespace Valve.VR.InteractionSystem
 			{
 				//Dampen the mapping change rate and apply it to the mapping
 				mappingChangeRate = Mathf.Lerp( mappingChangeRate, 0.0f, momemtumDampenRate * Time.deltaTime );
-				linearMapping.value = Mathf.Clamp01( linearMapping.value + ( mappingChangeRate * Time.deltaTime ) );
+				linearMapping.Value = Mathf.Clamp01( linearMapping.Value + ( mappingChangeRate * Time.deltaTime ) );
 
 				if ( repositionGameObject )
 				{
-					transform.position = Vector3.Lerp( startPosition.position, endPosition.position, linearMapping.value );
+					transform.position = Vector3.Lerp( startPosition.position, endPosition.position, linearMapping.Value );
 				}
 			}
 		}

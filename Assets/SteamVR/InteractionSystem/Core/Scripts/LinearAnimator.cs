@@ -39,9 +39,9 @@ namespace Valve.VR.InteractionSystem
 		//-------------------------------------------------
 		void Update()
 		{
-			if ( currentLinearMapping != linearMapping.value )
+			if ( currentLinearMapping != linearMapping.Value )
 			{
-				currentLinearMapping = linearMapping.value;
+				currentLinearMapping = linearMapping.Value;
 				animator.enabled = true;
 				animator.Play("Anim", 0 , currentLinearMapping );
 				framesUnchanged = 0;

@@ -12,6 +12,7 @@ namespace Valve.VR.InteractionSystem
 	//-------------------------------------------------------------------------
 	public class LinearMapping : MonoBehaviour
 	{
-		public float value;
+        protected float value;
+        public virtual float Value { get { return value; } set { this.value = value; } }
 	}
 }

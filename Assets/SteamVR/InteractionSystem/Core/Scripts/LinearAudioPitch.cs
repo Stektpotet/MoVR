@@ -50,7 +50,7 @@ namespace Valve.VR.InteractionSystem
 		//-------------------------------------------------
 		private void Apply()
 		{
-			float y = pitchCurve.Evaluate( linearMapping.value );
+			float y = pitchCurve.Evaluate( linearMapping.Value );
 
 			audioSource.pitch = Mathf.Lerp( minPitch, maxPitch, y );
 		}

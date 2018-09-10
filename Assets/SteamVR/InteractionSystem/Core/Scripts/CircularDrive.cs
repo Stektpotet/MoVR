@@ -374,13 +374,13 @@ namespace Valve.VR.InteractionSystem
 			if ( limited )
 			{
 				// Map it to a [0, 1] value
-				linearMapping.value = ( outAngle - minAngle ) / ( maxAngle - minAngle );
+				linearMapping.Value = ( outAngle - minAngle ) / ( maxAngle - minAngle );
 			}
 			else
 			{
 				// Normalize to [0, 1] based on 360 degree windings
 				float flTmp = outAngle / 360.0f;
-				linearMapping.value = flTmp - Mathf.Floor( flTmp );
+				linearMapping.Value = flTmp - Mathf.Floor( flTmp );
 			}
 
 			UpdateDebugText();
@@ -406,7 +406,7 @@ namespace Valve.VR.InteractionSystem
 		{
 			if ( debugText )
 			{
-				debugText.text = string.Format( "Linear: {0}\nAngle:  {1}\n", linearMapping.value, outAngle );
+				debugText.text = string.Format( "Linear: {0}\nAngle:  {1}\n", linearMapping.Value, outAngle );
 			}
 		}
 

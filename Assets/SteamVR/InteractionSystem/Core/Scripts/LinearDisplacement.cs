@@ -34,7 +34,7 @@ namespace Valve.VR.InteractionSystem
 		{
 			if ( linearMapping )
 			{
-				transform.localPosition = initialPosition + linearMapping.value * displacement;
+				transform.localPosition = initialPosition + linearMapping.Value * displacement;
 			}
 		}
 	}
