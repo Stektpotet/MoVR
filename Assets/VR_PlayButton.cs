@@ -6,26 +6,34 @@ using Valve.VR;
 using Valve.VR.InteractionSystem;
 
 [RequireComponent(typeof(Interactable))]
+[RequireComponent(typeof(ControlBoardControl))]
 public class VR_PlayButton : MonoBehaviour
 {
-    public LinearAnimator previewAnimator;
+
+    public LinearDrive playbackDrive;
     public AnimationClip animationClip;
     LinearMapping animationMapping;
-    
+    ControlBoardControl control;
+
+
     public UnityEvent onHandHoverBegin;
     public UnityEvent onHandHoverEnd;
+    public UnityEvent onStop;
+    public UnityEvent onPause;
+
 
     public bool playing;
     public bool loop;
 
 
     private float animationTime;
-    public float playbackRate = 0;
+    public float playbackRate = 1;
 
 
     private void Awake()
     {
-        animationMapping = previewAnimator.linearMapping;
+        animationMapping = playbackDrive.linearMapping;
+        control = GetComponent<ControlBoardControl>();
     }
 
     //-------------------------------------------------
@@ -34,15 +42,26 @@ public class VR_PlayButton : MonoBehaviour
 
     private void HandHoverUpdate(Hand hand)
     {
-        if (hand.GetStandardInteractionButton() || ((hand.controller != null) && hand.controller.GetPressDown(EVRButtonId.k_EButton_Grip)))
+        if (hand.GetStandardInteractionButtonDown())
         {
+            hand.HoverLock(GetComponent<Interactable>());
+
             playing = !playing;
-            previewAnimator.animator.Play(animationClip.name, 0, 0);
-            animationTime = animationClip.length;
+            if(playing)
+            {
+                animationTime = animationClip.length;
+                playbackDrive.UpdateMapping(playbackRate * Time.deltaTime / animationTime);
+                control.RequestControlBoardFocus();
+            }
+        }
+
+        if (hand.GetStandardInteractionButtonUp())
+        {
+            hand.HoverUnlock(GetComponent<Interactable>());
         }
     }
 
-    private void Update()
+        private void Update()
     {
         if (playing)
         {
@@ -52,7 +71,13 @@ public class VR_PlayButton : MonoBehaviour
                 if (loop)
                     animationMapping.value = 0;
                 else
+                {
                     playing = false;
+                    onStop.Invoke();
+                    control.GiveAwayControlBoardFocus();
+                    animationMapping.value = 0;
+
+                }
             }
         }
     }

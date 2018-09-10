@@ -6,6 +6,7 @@
 
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -27,9 +28,12 @@ namespace Valve.VR.InteractionSystem
 		private float mappingChangeRate;
 		private int sampleCount = 0;
 
+        public UnityEvent onStartDrag;
+        public UnityEvent onEndDrag;
+        public UnityEvent onDrag;
 
-		//-------------------------------------------------
-		void Awake()
+        //-------------------------------------------------
+        void Awake()
 		{
 			mappingChangeSamples = new float[numMappingChangeSamples];
 		}
@@ -62,6 +66,7 @@ namespace Valve.VR.InteractionSystem
 		{
 			if ( hand.GetStandardInteractionButtonDown() )
 			{
+                onStartDrag.Invoke();
 				hand.HoverLock( GetComponent<Interactable>() );
 
 				initialMappingOffset = linearMapping.value - CalculateLinearMapping( hand.transform );
@@ -74,11 +79,13 @@ namespace Valve.VR.InteractionSystem
 				hand.HoverUnlock( GetComponent<Interactable>() );
 
 				CalculateMappingChangeRate();
+                onEndDrag.Invoke();
 			}
 
 			if ( hand.GetStandardInteractionButton() )
 			{
 				UpdateLinearMapping( hand.transform );
+                onDrag.Invoke();
 			}
 		}
 
@@ -99,7 +106,10 @@ namespace Valve.VR.InteractionSystem
 			}
 		}
 
-
+        public void UpdateMapping(float hz)
+        {
+            mappingChangeRate = hz;
+        }
 		//-------------------------------------------------
 		private void UpdateLinearMapping( Transform tr )
 		{

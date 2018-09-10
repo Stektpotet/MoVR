@@ -10,8 +10,9 @@ public class MotionRecorder : MonoBehaviour
     Animator animator;
 
 
-
+    
     public Animator previewAnimator;
+    ControlBoardControl controlBoard_RecordControl;
 
     [SerializeField]
     private GameObject[] indicators;
@@ -25,7 +26,10 @@ public class MotionRecorder : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
+        controlBoard_RecordControl = GetComponent<ControlBoardControl>();
         ResetRecorder();
+        controlBoard_RecordControl.GiveAwayControlBoardFocus();
+
     }
 
 
@@ -43,8 +47,8 @@ public class MotionRecorder : MonoBehaviour
             SteamVR_Controller.Input(Input.GetButtonDown("Button1") ? 1 : 2).TriggerHapticPulse(1000);
             m_recording = true;
             
-            previewAnimator.SetTrigger("StopPreview");
-
+            //previewAnimator.SetTrigger("StopPreview");
+            controlBoard_RecordControl.RequestControlBoardFocus();
             m_clip.ClearCurves();
             foreach (GameObject indicator in indicators) {
                 indicator.SetActive(true);
@@ -68,7 +72,8 @@ public class MotionRecorder : MonoBehaviour
             {
                 previewAnimator.SetTrigger("PlayPreview");
             }
-            
+
+            controlBoard_RecordControl.GiveAwayControlBoardFocus();
 
             foreach (GameObject indicator in indicators) {
                 indicator.SetActive(false);
